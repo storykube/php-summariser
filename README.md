@@ -11,3 +11,4 @@ Many thanks to @DavidBelicza and all contributors for made a very interesting pa
 composer install --dev
 composer test
 ```
+

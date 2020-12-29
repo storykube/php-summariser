@@ -1,6 +1,6 @@
 {
     "name": "storykube/php-summariser",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Library to generate extractive summary with PHP.",
     "type": "library",
     "license": "MIT",
