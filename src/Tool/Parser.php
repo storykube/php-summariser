@@ -144,18 +144,36 @@ class Parser
             PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
         );
 
+        $repassedSentences = [];
+
+        // if is there an acronym then: (u.k., u.s., n.)
+        foreach($sentences as $k => $s) {
+            if(array_key_exists($k, $sentences)) {
+                if(array_key_exists($k+1, $sentences) && array_key_exists($k+2, $sentences)) {
+                    if((substr($s, -2, 1) === '.' || substr($s, -2, 1) === ' ') && $sentences[$k+1] === '. ') {
+                        $repassedSentences[] = $s . $sentences[$k+1] . $sentences[$k+2];
+                        unset($sentences[$k+1]);
+                        unset($sentences[$k+2]);
+                    } else {
+                        $repassedSentences[] = $s;
+                    }
+                } else {
+                    $repassedSentences[] = $s;
+                }
+            }
+        }
+
         // restore the protected punctuations
-        foreach ($sentences as $k => $sent) {
-            $sentences[$k] = (new QuotedTextCurator($this->rawText))->restoreFromText($sent);
+        foreach ($repassedSentences as $k => $sent) {
+            $repassedSentences[$k] = (new QuotedTextCurator($this->rawText))->restoreFromText($sent);
         }
 
         // then, return
-
         return array_values(
             array_filter(
                 array_map(
                     [$this, 'cleanSentence'],
-                    $sentences
+                    $repassedSentences
                 )
             )
         );

@@ -37,4 +37,24 @@ final class TextRankFacadeTest extends TestCase
         echo $summary;
 
     }
+
+    public function testAcronym()
+    {
+        $text = "Georgia (SK) — Joe Biden narrowly defeated President Trump in u.s. southern battleground state, becoming the first Democratic presidential candidate to secure it. This is an example text.";
+        $api = new TextRankFacade();
+        $stopWords = new English();
+        $api->setStopWords($stopWords);
+        $api->setSentencesLimit(5);
+
+        $sentences = $api->summarizeTextBasic($text);
+
+        foreach($sentences as $k => $v) {
+            $this->assertStringEndsNotWith('s.', $v);
+        }
+
+        $summary = implode(" ", $sentences);
+
+
+        echo $summary;
+    }
 }
